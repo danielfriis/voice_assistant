@@ -1,0 +1,1 @@
+EDITOR="cursor --wait" bin/rails credentials:edit
