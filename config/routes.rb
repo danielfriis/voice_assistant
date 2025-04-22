@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resource :session
+  resources :passwords, param: :token
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -12,8 +14,14 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
-  root "voice_chats#index"
+  root "agenda#index"
 
-  resources :sessions, only: [ :create ]
+  resources :openai_sessions, only: [ :create, :index ]
   resources :tool_calls, only: [ :create ]
+  resources :todos
+  resources :agenda, only: [ :index, :show ], param: :date
+
+  # Add these routes
+  get "auth/:provider/callback", to: "oauth_callbacks#callback"
+  get "auth/failure", to: "oauth_callbacks#failure"
 end

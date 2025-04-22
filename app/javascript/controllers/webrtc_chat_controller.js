@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["startButton", "stopButton", "audioOutput"]
+  static targets = ["startButton", "stopButton", "audioOutput", "toggleButton"]
 
   async connect() {
     this.peerConnection = null
@@ -10,10 +10,20 @@ export default class extends Controller {
     this.csrfToken = document.querySelector('meta[name="csrf-token"]').content
   }
 
+  toggleChat() {
+    if (this.mediaStream) {
+      this.stopChat()
+      this.toggleButtonTarget.textContent = "Start Chat"
+    } else {
+      this.startChat()
+      this.toggleButtonTarget.textContent = "Stop Chat"
+    }
+  }
+
   async startChat() {
     try {
       // Get ephemeral token from our Rails backend
-      const tokenResponse = await fetch("/sessions", {
+      const tokenResponse = await fetch("/openai_sessions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -122,6 +132,36 @@ export default class extends Controller {
     }
   }
 
+  async fetchSessionSetup() {
+    const response = await fetch("/openai_sessions", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": this.csrfToken
+      }
+    })
+    const data = await response.json()
+    return data
+  }
+
+  async setupSession() {
+    const message = {
+      type: "conversation.item.create",
+      item: {
+          type: "message",
+          role: "system",
+          content: [
+              {
+                  type: "input_text",
+                  text: this.sessionData.greeting
+              }
+          ]
+      }
+    }
+    this.dataChannel.send(JSON.stringify(message))
+    this.dataChannel.send(JSON.stringify({ type: "response.create" }))
+  }
+
   async executeToolCall(toolCall) {
     const response = await fetch("/tool_calls", {
       method: "POST",
@@ -164,8 +204,10 @@ export default class extends Controller {
           console.log('Tool call result:', result)
           this.addToolResult(message.call_id, result)
           break
-        case 'session_begins':
-          console.log('Session started with OpenAI')
+        case 'session.created':
+          this.sessionData = await this.fetchSessionSetup()
+          console.log('Session data:', this.sessionData)
+          this.setupSession()
           break
         case 'content_block_delta':
           console.log('Content block delta received:', message.delta)

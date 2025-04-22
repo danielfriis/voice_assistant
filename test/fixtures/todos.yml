@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  description: MyText
+  todo: one
+  due_at: 2025-04-21 18:59:08
+  remind_at: 2025-04-21 18:59:08
+  completed_at: 2025-04-21 18:59:08
+
+two:
+  title: MyString
+  description: MyText
+  todo: two
+  due_at: 2025-04-21 18:59:08
+  remind_at: 2025-04-21 18:59:08
+  completed_at: 2025-04-21 18:59:08

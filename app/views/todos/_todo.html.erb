@@ -1,0 +1,13 @@
+<div id="<%= dom_id todo %>">
+  <%= form_for todo do |form| %>
+    <div class="flex gap-3">
+      <%= form.label :completed_at, for: "todo_#{todo.id}_completed_at", class: "flex items-center gap-2" do %>
+        <%= form.check_box :completed_at, id: "todo_#{todo.id}_completed_at", class: "peer size-4 appearance-none rounded-sm border border-gray-300 accent-indigo-500 checked:appearance-auto dark:border-gray-600 dark:accent-indigo-600" %>
+
+        <div class="peer-checked:line-through">
+          <%= todo.title %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
