@@ -1,3 +1,5 @@
+redirect_uri = Rails.env.production? ? "https://jamie.nowadays.tech/auth/google_oauth2/callback" : "https://discrete-open-boa.ngrok-free.app/auth/google_oauth2/callback"
+
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :google_oauth2,
     Rails.application.credentials.dig(:google_oauth, :client_id),
@@ -6,7 +8,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       scope: "email,profile,https://www.googleapis.com/auth/calendar.readonly,https://www.googleapis.com/auth/calendar.events",
       prompt: "consent select_account",
       access_type: "offline",
-      redirect_uri: "https://discrete-open-boa.ngrok-free.app/auth/google_oauth2/callback"
+      redirect_uri: redirect_uri
     }
 end
 
