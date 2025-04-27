@@ -1,0 +1,30 @@
+<!-- Current time indicator -->
+<% if date == Date.today %>
+  <div class="col-start-1 col-end-2 row-start-1 grid grid-cols-1 z-10" style="grid-template-rows: 1.75rem repeat(288, minmax(0, 1fr)) auto">
+    <div data-controller="current-time" 
+        data-current-time-target="indicator"
+        class="relative mt-px flex pointer-events-none"
+        style="display: none;"
+        >
+      <div class="absolute inset-0 flex">
+        <div class="w-full relative">
+          <div class="absolute left-0 right-0 h-px bg-red-400"></div>
+          <div class="absolute -ml-1.5 -mt-1.5 w-3 h-3 rounded-full bg-red-400"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<!-- Events -->
+<% events.each do |event| %>
+  <ol class="col-start-1 col-end-2 row-start-1 grid grid-cols-1" style="grid-template-rows: 1.75rem repeat(288, minmax(0, 1fr)) auto">
+    <% next if event.start_time.nil? %>
+    <li class="relative -mt-1 flex" style="grid-row: <%= 2 + event.start_time.strftime('%H').to_i * 12 + (event.start_time.strftime('%M').to_i * 12.0 / 60).round %> / span <%= (((event.duration) / 24 / 12).to_i) %>">
+      <a href="<%= event.html_link %>" target="_blank" class="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg border border-white p-2 text-xs/5" style="background-color: <%= event.background_color %>; color: <%= event.foreground_color %>;">
+        <p class="order-1 font-semibold"><%= event.title %></p>
+        <p><time datetime="<%= event.start_date.strftime('%Y-%m-%d') %>T<%= event.start_time.strftime('%H:%M') %>"><%= event.start_time.strftime('%H:%M') %></time></p>
+      </a>
+    </li>
+  </ol>
+<% end %>

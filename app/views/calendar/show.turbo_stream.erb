@@ -1,0 +1,11 @@
+<%= turbo_stream.update "date" do %>
+  <%= render "agenda/date", date: @date %>
+<% end %>
+
+<%= turbo_stream.update "calendar_content" do %>
+  <%= render "calendar/content", events: @events, date: @date %>
+<% end %>
+
+<%= turbo_stream.update "calendar_controls" do %>
+  <%= render "calendar/controls", events: @events, date: @date %>
+<% end %>

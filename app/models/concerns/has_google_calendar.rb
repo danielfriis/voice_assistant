@@ -2,21 +2,19 @@ module HasGoogleCalendar
   extend ActiveSupport::Concern
   require "google/apis/calendar_v3"
 
-  def google_calendar_events(start_date, end_date)
+  def google_calendars
+    @google_calendars ||= calendar_client.list_calendar_lists.items
+  end
+
+  def google_calendar_events(start_date, end_date, calendar_id = nil)
     return [] unless google_identity&.raw_info&.dig("token")
 
-    calendar_client = Google::Apis::CalendarV3::CalendarService.new
-    calendar_client.authorization = google_credentials
-
-    # Add debug logging
-    Rails.logger.debug "Using token: #{google_identity.raw_info["token"]}"
-
-    calenders = calendar_client.list_calendar_lists
+    calender_ids = calendar_id ? [ calendar_id ] : google_calendars.map(&:id)
 
     events = []
-    calenders.items.each do |calendar|
+    calender_ids.each do |calendar_id|
       events += calendar_client.list_events(
-        calendar.id,
+        calendar_id,
         single_events: true,
         order_by: "startTime",
         time_min: start_date.iso8601,
@@ -35,10 +33,16 @@ module HasGoogleCalendar
     []
   end
 
+  def google_identity
+    @google_identity ||= identities.find_by(provider: "google_oauth2")
+  end
+
   private
 
-  def google_identity
-    identities.find_by(provider: "google_oauth2")
+  def calendar_client
+    @calendar_client ||= Google::Apis::CalendarV3::CalendarService.new
+    @calendar_client.authorization = google_credentials
+    @calendar_client
   end
 
   def google_credentials

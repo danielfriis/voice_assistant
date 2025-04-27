@@ -1,0 +1,5 @@
+<h1 class="text-lg/6 font-semibold text-gray-900">
+  <time datetime="<%= date.strftime('%Y-%m-%d') %>" class="sm:hidden"><%= date.strftime('%b %d, %Y') %></time>
+  <time datetime="<%= date.strftime('%Y-%m-%d') %>" class="hidden sm:inline"><%= date.strftime('%B %d, %Y') %></time>
+</h1>
+<p class="mt-1 text-sm/4 text-gray-500"><%= date.strftime('%A') %></p>

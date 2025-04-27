@@ -13,10 +13,10 @@ export default class extends Controller {
   toggleChat() {
     if (this.mediaStream) {
       this.stopChat()
-      this.toggleButtonTarget.textContent = "Start Chat"
+      this.toggleButtonTarget.textContent = "Start Planning"
     } else {
       this.startChat()
-      this.toggleButtonTarget.textContent = "Stop Chat"
+      this.toggleButtonTarget.textContent = "Stop Planning"
     }
   }
 
@@ -144,36 +144,56 @@ export default class extends Controller {
     return data
   }
 
-  async setupSession() {
-    const message = {
-      type: "conversation.item.create",
-      item: {
-          type: "message",
-          role: "system",
-          content: [
-              {
-                  type: "input_text",
-                  text: this.sessionData.greeting
-              }
-          ]
-      }
-    }
-    this.dataChannel.send(JSON.stringify(message))
-    this.dataChannel.send(JSON.stringify({ type: "response.create" }))
+  static tool_url_stems = {
+    "todo": "/todos",
+    "note": "/notes",
+    "project": "/projects",
+    "memory": "/memories"
   }
 
-  async executeToolCall(toolCall) {
-    const response = await fetch("/tool_calls", {
-      method: "POST",
+  async executeToolCall(callId, toolCall) {
+    const { tool, action } = this.extractToolAndAction(toolCall)
+    const tool_arguments = JSON.parse(toolCall.arguments)
+    const [url, method] = this.buildUrlAndMethod(tool, action, tool_arguments)
+
+    const response = await fetch(url, {
+      method: method,
       headers: {
         "Content-Type": "application/json",
+        "Accept": "application/json",
         "X-CSRF-Token": this.csrfToken
       },
-      body: JSON.stringify({ tool_call: toolCall })
+      body: JSON.stringify({ [tool]: tool_arguments })
     })
 
     const data = await response.json()
-    return data
+
+    this.addToolResult(callId, data)
+  }
+
+  extractToolAndAction(toolCall) {
+    const [tool, action] = toolCall.name.split('_')
+    console.log("Tool and action:", tool, action)
+    return { tool, action }
+  }
+
+  buildUrlAndMethod(tool, action, tool_arguments) {
+    const url = this.constructor.tool_url_stems[tool]
+    
+    switch (action) {
+      case "create":
+        return [`${url}`, "POST"]
+      case "update":
+        return [`${url}/${tool_arguments.id}`, "PATCH"]
+      case "delete":
+        return [`${url}/${tool_arguments.id}`, "DELETE"]
+      case "get":
+        return [`${url}/${tool_arguments.id}`, "GET"]
+      case "list":
+        return [`${url}`, "GET"]
+      default:
+        return [`${url}/${tool_arguments.id}/${action}`, "PATCH"]
+    }
   }
 
   addToolResult(callId, result) {
@@ -185,11 +205,8 @@ export default class extends Controller {
         output: JSON.stringify(result)
       }
     }
-    const responseMessage = {
-      type: "response.create"
-    }
     this.dataChannel.send(JSON.stringify(message))
-    this.dataChannel.send(JSON.stringify(responseMessage))
+    this.dataChannel.send(JSON.stringify({ type: "response.create" }))
   }
 
   async handleDataChannelMessage(event) {
@@ -200,24 +217,10 @@ export default class extends Controller {
 
       switch (message.type) {
         case 'response.function_call_arguments.done':
-          const result = await this.executeToolCall(message)
-          console.log('Tool call result:', result)
-          this.addToolResult(message.call_id, result)
+          this.executeToolCall(message.call_id, message)
           break
         case 'session.created':
-          this.sessionData = await this.fetchSessionSetup()
-          console.log('Session data:', this.sessionData)
-          this.setupSession()
-          break
-        case 'content_block_delta':
-          console.log('Content block delta received:', message.delta)
-          break
-        case 'content_block_stop':
-          console.log('Content block completed')
-          break
-        case 'session_ends':
-          console.log('Session ended with OpenAI')
-          this.stopChat()
+          this.dataChannel.send(JSON.stringify({ type: "response.create" }))
           break
         case 'error':
           console.error('Error from OpenAI:', message.error)

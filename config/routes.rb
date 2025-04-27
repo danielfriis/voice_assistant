@@ -18,8 +18,14 @@ Rails.application.routes.draw do
 
   resources :openai_sessions, only: [ :create, :index ]
   resources :tool_calls, only: [ :create ]
-  resources :todos
-  resources :agenda, only: [ :index, :show ], param: :date
+  resources :todos do
+    member do
+      patch :complete
+      patch :uncomplete
+    end
+  end
+  resources :agenda, only: [ :index ]
+  resources :calendar, only: [ :show ], param: :date
 
   # Add these routes
   get "auth/:provider/callback", to: "oauth_callbacks#callback"

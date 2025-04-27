@@ -1,0 +1,170 @@
+<%= turbo_stream_from "todos" %>
+
+<div class="h-dvh">
+  <div class="flex h-full flex-col">
+    <header class="flex flex-none items-center justify-between bg-gray-50 border-b border-gray-200 px-6 py-4">
+      <div>
+        <%= turbo_frame_tag "date" do %>
+          <%= render "agenda/date", date: @date %>
+        <% end %>
+      </div>
+      <div class="flex items-center">
+        <div class="relative flex items-center rounded-md bg-white shadow-xs md:items-stretch">
+          <%= turbo_frame_tag "calendar_controls", class: "contents" do %>
+            <%= render "calendar/controls", events: @events, date: @date %>
+          <% end %>
+        </div>
+        <div id="webrtc-chat" data-controller="webrtc-chat" data-turbo-permanent="true">
+          <button data-webrtc-chat-target="toggleButton" data-action="click->webrtc-chat#toggleChat" type="button" class="cursor-pointer ml-6 rounded-md shadow-xs bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+            Start Planning
+          </button>
+          <audio data-webrtc-chat-target="audioOutput"></audio>
+        </div>
+      </div>
+    </header>
+    <div class="isolate flex flex-auto overflow-hidden bg-white">
+      <div class="flex flex-auto flex-col overflow-auto" 
+           data-controller="calendar-scroll"
+           data-calendar-scroll-target="container">
+        <div class="flex w-full flex-auto">
+          <div class="w-14 flex-none bg-white ring-1 ring-gray-100"></div>
+          <div class="grid flex-auto grid-cols-1 grid-rows-1">
+            <!-- Horizontal lines -->
+            <div class="col-start-1 col-end-2 row-start-1 grid divide-y divide-gray-100" style="grid-template-rows: repeat(48, minmax(3.5rem, 1fr))">
+              <div class="row-end-1 h-7"></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">12AM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">1AM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">2AM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">3AM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">4AM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">5AM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">6AM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">7AM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">8AM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">9AM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">10AM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">11AM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">12PM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">1PM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">2PM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">3PM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">4PM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">5PM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">6PM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">7PM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">8PM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">9PM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">10PM</div>
+              </div>
+              <div></div>
+              <div>
+                <div class="-mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-gray-400">11PM</div>
+              </div>
+              <div></div>
+            </div>
+
+            <%= turbo_frame_tag "calendar_content", class: "contents" do %>
+              <%= render "calendar/content", events: @events, date: @date %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="hidden md:flex w-1/2 max-w-md flex-col border-l border-gray-200">
+        <div class="flex flex-col grow p-6 overflow-y-auto">
+          <div id="overdue" class="flex flex-col gap-y-1 mb-6">
+            <h3 class="text-sm font-medium text-red-500 mb-2 last:hidden">Overdue</h3>
+            <%= render @todos.overdue %>
+          </div>
+
+          <div id="today" class="flex flex-col gap-y-1 mb-6">
+            <h3 class="text-sm font-medium text-gray-500 mb-2 last:hidden">Today</h3>
+            <%= render @todos.due_today %>
+          </div>
+
+          <div id="future" class="flex flex-col gap-y-1 mb-6">
+            <h3 class="text-sm font-medium text-gray-500 mb-2 last:hidden">Next</h3>
+            <%= render @todos.future %>
+          </div>
+
+          <div id="no-due-date" class="flex flex-col gap-y-1 mb-6">
+            <h3 class="text-sm font-medium text-gray-500 mb-2 last:hidden">Someday</h3>
+            <%= render @todos.no_due_date %>
+          </div>
+
+          <div data-todos-target="newTodoTemplate" class="hidden"><%= render "todos/todo", todo: @todos.new %></div>
+        </div>
+        <div class="shrink flex justify-between items-center p-6 border-t border-gray-100">
+          <span class="text-sm text-gray-500"><%= Current.user.name %></span>
+          <%= link_to "Sign out", session_path, data: { turbo_method: :delete }, class: "text-sm text-gray-500 hover:text-gray-700" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Libre+Baskerville');
 @import "tailwindcss";
+
+@theme {
+  --font-serif: 'Libre Baskerville', serif;
+}

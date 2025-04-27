@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  identity: one
+  visible: false
+  title: MyString
+  description: MyString
+  background_color: MyString
+  foreground_color: MyString
+  time_zone: MyString
+
+two:
+  identity: two
+  visible: false
+  title: MyString
+  description: MyString
+  background_color: MyString
+  foreground_color: MyString
+  time_zone: MyString

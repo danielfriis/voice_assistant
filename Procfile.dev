@@ -1,2 +1,3 @@
 web: bin/rails server
 css: bin/rails tailwindcss:watch
+proxy:  ngrok http --url https://discrete-open-boa.ngrok-free.app 3000 --log stdout --log-level info | grep -Eoh "https.+\.ngrok-free\.app" --line-buffered | awk '{print "Proxy address: " $0; fflush("/dev/stdout")}'

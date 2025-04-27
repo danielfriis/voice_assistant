@@ -1,13 +1,33 @@
-<div id="<%= dom_id todo %>">
-  <%= form_for todo do |form| %>
-    <div class="flex gap-3">
-      <%= form.label :completed_at, for: "todo_#{todo.id}_completed_at", class: "flex items-center gap-2" do %>
-        <%= form.check_box :completed_at, id: "todo_#{todo.id}_completed_at", class: "peer size-4 appearance-none rounded-sm border border-gray-300 accent-indigo-500 checked:appearance-auto dark:border-gray-600 dark:accent-indigo-600" %>
+<div id="<%= dom_id todo %>" data-controller="todo">
+  <%= form_with model: todo, html: { class: "flex flex-col", data: { todo_target: "form" } } do |form| %>
+    <div class="flex items-center gap-2">
+      <%= form.check_box :toggle_completed,
+                         id: "todo_#{todo.id}_completed_at",
+                         checked: todo.completed_at.present?,
+                         data: {
+                          todo_target: "checkbox",
+                          action: "change->todo#submitForm"
+                         },
+                         class: "peer size-4 appearance-none rounded-sm border border-gray-300 accent-indigo-500 checked:appearance-auto dark:border-gray-600 dark:accent-indigo-600" %>
 
-        <div class="peer-checked:line-through">
-          <%= todo.title %>
-        </div>
-      <% end %>
+      <div class="peer-checked:line-through">
+        <%= form.hidden_field :title, value: todo.title, data: { todo_target: "title" } %>
+        <%= content_tag :span,
+            todo.title,
+            class: "cursor-text focus:outline-none",
+            contenteditable: true,
+            data: {
+              action: "blur->todo#updateTitle keydown.enter->todo#updateTitle",
+              todo_id: todo.id
+            } %>
+      </div>
     </div>
+
+    <% if todo.project.present? %>
+      <div class="flex gap-2">
+        <div class="size-4"></div>
+        <span class="text-sm text-gray-500"><%= todo.project.title %></span>
+      </div>
+    <% end %>
   <% end %>
 </div>
