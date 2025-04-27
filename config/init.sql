@@ -1,0 +1,4 @@
+CREATE DATABASE voice_assistant_production;
+CREATE DATABASE voice_assistant_production_cache;
+CREATE DATABASE voice_assistant_production_cable;
+CREATE DATABASE voice_assistant_production_queue;
