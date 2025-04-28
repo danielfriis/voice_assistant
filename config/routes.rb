@@ -24,6 +24,9 @@ Rails.application.routes.draw do
       patch :uncomplete
     end
   end
+  resources :notes
+  resources :projects
+  resources :memories
   resources :agenda, only: [ :index ]
   resources :calendar, only: [ :show ], param: :date
 

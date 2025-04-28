@@ -99,9 +99,8 @@ export default class extends Controller {
     this.dataChannel = this.peerConnection.createDataChannel("oai-events", {
       ordered: true  // Ensure ordered delivery for iOS
     })
-    // Use both event handler methods for better iOS compatibility
+    // Use addEventListener for message handling
     this.dataChannel.addEventListener("message", this.handleDataChannelMessage.bind(this))
-    this.dataChannel.onmessage = this.handleDataChannelMessage.bind(this)
 
     // Create and set local description
     const offer = await this.peerConnection.createOffer()
