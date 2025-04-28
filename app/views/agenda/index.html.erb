@@ -14,7 +14,7 @@
             <%= render "calendar/controls", events: @events, date: @date %>
           <% end %>
         </div>
-        <div id="webrtc-chat" data-controller="webrtc-chat" data-turbo-permanent="true">
+        <div id="webrtc-chat" data-controller="webrtc-chat" data-turbo-permanent="true" class="hidden md:block">
           <button data-webrtc-chat-target="toggleButton" data-action="click->webrtc-chat#toggleChat" type="button" class="cursor-pointer ml-6 rounded-md shadow-xs bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
             Start Planning
           </button>
@@ -164,6 +164,14 @@
           <span class="text-sm text-gray-500"><%= Current.user.name %></span>
           <%= link_to "Sign out", session_path, data: { turbo_method: :delete }, class: "text-sm text-gray-500 hover:text-gray-700" %>
         </div>
+      </div>
+    </div>
+    <div class="md:hidden py-4 px-6 bg-gray-50 border-t border-gray-200 flex items-center justify-end">
+      <div id="webrtc-chat" data-controller="webrtc-chat" data-turbo-permanent="true">
+        <button data-webrtc-chat-target="toggleButton" data-action="click->webrtc-chat#toggleChat" type="button" class="cursor-pointer rounded-md shadow-xs bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+          Start Planning
+        </button>
+        <audio data-webrtc-chat-target="audioOutput"></audio>
       </div>
     </div>
   </div>
