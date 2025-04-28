@@ -82,7 +82,7 @@ export default class extends Controller {
       audioElement.srcObject = event.streams[0]
     }
 
-    // Get microphone access and add track
+    // Get microphone access and add track - this is required for iOS
     try {
       this.mediaStream = await navigator.mediaDevices.getUserMedia({
         audio: true
@@ -95,9 +95,13 @@ export default class extends Controller {
       throw error
     }
 
-    // Set up data channel
-    this.dataChannel = this.peerConnection.createDataChannel("oai-events")
+    // Set up data channel with explicit configuration for iOS
+    this.dataChannel = this.peerConnection.createDataChannel("oai-events", {
+      ordered: true  // Ensure ordered delivery for iOS
+    })
+    // Use both event handler methods for better iOS compatibility
     this.dataChannel.addEventListener("message", this.handleDataChannelMessage.bind(this))
+    this.dataChannel.onmessage = this.handleDataChannelMessage.bind(this)
 
     // Create and set local description
     const offer = await this.peerConnection.createOffer()

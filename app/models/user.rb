@@ -15,10 +15,6 @@ class User < ApplicationRecord
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
-  def time_zone
-    nil
-  end
-
   def sync_calendars
     # Get all Google calendars
     google_calendar_ids = google_calendars.map(&:id)
