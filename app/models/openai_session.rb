@@ -48,6 +48,8 @@ class OpenaiSession
         You do this by helping them plan their day, making sure #{@user.name} works on the right things, gets those things done, and helping them reflect on their day and plan for the next day.
         #{map_todos}
         #{@user.name} expects you to lead the conversation. Make sure you always follow up with a question after you've shared something to keep the conversation going.
+        If #{@user.name} doesn't respond, you should ask them if they're ok.
+        If #{@user.name} talks about something you don't have information about, you should ask them for more information.
       </goals>
 
       <tool_usage>
@@ -158,21 +160,26 @@ class OpenaiSession
 
   def map_todos
     return "#{@user.name} has no todos." if @todos.empty?
+    result = "<projects>"
+    @projects.each do |project|
+      result += "<project id=\"#{project.id}\">#{project.title}</project>"
+    end
+    result += "</projects>"
 
-    result = "<todos>"
+    result += "<todos>"
     @todos.grouped_by_due_date.each do |due_date_group, todos_in_group|
       result += "<group name=\"#{due_date_group.to_s.humanize}\">"
       todos_in_group.each do |todo|
         result += "<todo id=\"#{todo.id}\">"
         result += "<title>#{todo.title}</title>"
+        result += "<description>#{todo.description || 'no description'}</description>"
 
-        if todo.project.present?
-          result += "<project id=\"#{todo.project.id}\">#{todo.project.title}</project>"
-        end
+        result += "<project id=\"#{todo.project_id || 'no project'}\">#{todo&.project&.title || 'no project'}</project>"
 
         if todo.completed_at.present?
           result += "<status>COMPLETED</status>"
-        elsif todo.due_date.present?
+        end
+        if todo.due_date.present?
           result += "<due_date>#{todo.due_date}</due_date>"
           result += "<due_time>#{todo.due_time}</due_time>" if todo.due_time.present?
         end
