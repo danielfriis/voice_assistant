@@ -151,7 +151,8 @@ export default class extends Controller {
     "todo": "/todos",
     "note": "/notes",
     "project": "/projects",
-    "memory": "/memories"
+    "memory": "/memories",
+    "event": "/events"
   }
 
   async executeToolCall(callId, toolCall) {

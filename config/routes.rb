@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   resources :notes
   resources :projects
   resources :memories
+  resources :events
   resources :agenda, only: [ :index ]
   resources :calendar, only: [ :show ], param: :date
 

@@ -34,11 +34,11 @@ class Todo < ApplicationRecord
       target = "future"
     end
 
-    broadcast_append_to "todos", target: target, partial: "todos/todo", locals: { todo: self }
+    broadcast_append_to "agenda", target: target, partial: "todos/todo", locals: { todo: self }
   end
 
   def broadcast_remove_todo
-    broadcast_remove_to "todos", target: "todo_#{self.id}"
+    broadcast_remove_to "agenda", target: "todo_#{self.id}"
   end
 
   def broadcast_update_todo
@@ -48,7 +48,7 @@ class Todo < ApplicationRecord
       broadcast_remove_todo
       broadcast_todo
     else
-      broadcast_replace_to "todos", target: "todo_#{self.id}", partial: "todos/todo", locals: { todo: self }
+      broadcast_replace_to "agenda", target: "todo_#{self.id}", partial: "todos/todo", locals: { todo: self }
     end
   end
 end

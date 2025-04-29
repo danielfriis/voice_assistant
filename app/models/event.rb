@@ -8,17 +8,31 @@ class Event < ApplicationRecord
 
   after_initialize :set_dates, if: :new_record?
 
+  after_create_commit :broadcast_event
+
+  def broadcast_event
+    broadcast_append_to "agenda", target: "calendar_events", partial: "calendar/event", locals: { event: self }
+  end
+
   def duration
     end_time - start_time
   end
 
   def self.create_via_google(calendar, event_data)
+    zone = ActiveSupport::TimeZone.new(event_data[:time_zone])
+    raise "Invalid time zone: #{event_data[:time_zone]}" if zone.nil?
+
+    start_time = zone.parse(event_data[:start_time]).iso8601
+    end_time = zone.parse(event_data[:end_time]).iso8601
+
     event_record = new(
       calendar: calendar,
       title: event_data[:title],
       description: event_data[:description],
-      start_time: event_data[:start_time],
-      end_time: event_data[:end_time]
+      start_date: start_time.to_date,
+      start_time: start_time,
+      end_date: end_time.to_date,
+      end_time: end_time
     )
 
     # Convert times to the calendar's timezone
@@ -48,6 +62,7 @@ class Event < ApplicationRecord
 
     event_record.provider_id = created_event.id
     event_record.save!
+    event_record
   end
 
   def full_start_time
