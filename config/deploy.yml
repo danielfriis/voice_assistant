@@ -19,7 +19,9 @@ servers:
 # Note: If using Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
 proxy:
   ssl: true
-  host: jamie.nowadays.tech
+  hosts:
+    - jamie.nowadays.tech
+    - early.jamieai.com
 
 # Credentials for your image host.
 registry:
