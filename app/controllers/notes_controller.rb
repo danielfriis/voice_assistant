@@ -1,5 +1,5 @@
 class NotesController < ApplicationController
-  before_action :set_note, only: [ :destroy ]
+  before_action :set_note, only: [ :update, :destroy ]
 
   def create
     @note = Current.user.notes.create(note_params)

@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [ :destroy, :update ]
+  before_action :set_project, only: [ :update, :destroy ]
 
   def create
     @project = Current.user.projects.create(project_params)

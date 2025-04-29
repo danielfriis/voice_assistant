@@ -1,5 +1,5 @@
 class MemoriesController < ApplicationController
-  before_action :set_memory, only: [ :destroy ]
+  before_action :set_memory, only: [ :update, :destroy ]
 
   def create
     @memory = Current.user.memories.create(memory_params)
