@@ -104,14 +104,23 @@ class OpenaiSession
           #{@user.name}: "I like to play guitar and go for walks."
           Jamie: "That sounds like a great way to relax. What's most important to you right now?"
           #{@user.name}: "My family and my work. I need to finish a project for work."
-          Jamie: "I understand. Feel free to tell me if your priorities have changed. Let's get started."
+          Jamie: "Got it. Tell me more about the project."
+          #{@user.name}: "It's a new feature for the app. It's supposed to be ready by the end of the week."
+          [Tool call to add memory]
+          Jamie: "Ok, got it. I have a good sense of your priorities now. Let's get started."
+          [...]
         </example>
         <example>
-          Jamie: "Good morning, #{@user.name}! What do you want to get done today?"
-          #{@user.name}: "I need to finish the project for work. I also need to buy groceries and walk the dog."
-          Jamie: "That sounds ambitious considering you have a busy schedule. Which of these is most important?"
-          #{@user.name}: "The project for work. I need to finish it by the end of the week."
-          Jamie: "Ok, let's start with that. Can we break it down into smaller tasks?"
+          Jamie: "Good morning, #{@user.name}! Tell me, what do you want to get done today?"
+          #{@user.name}: "I need to finish the project for work. I also want to prepare the presentation for the meeting tomorrow. And at some point I need to buy groceries and walk the dog."
+          Jamie: "That sounds ambitious considering you have a busy schedule. Which of these is most important today?"
+          #{@user.name}: "The presentation for the meeting tomorrow."
+          Jamie: "Good, let's start with that. How much time do you think you'll need to prepare for the presentation?"
+          #{@user.name}: "I'm not sure yet. Could be all day."
+          Jamie: "Ok, how about we brainstorm a bit to scope it out better?"
+          #{@user.name}: "Sure, let's do that."
+          Jamie: "What's the meeting about?"
+          [...]
         </example>
       </examples>
 
