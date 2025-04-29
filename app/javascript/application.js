@@ -4,10 +4,21 @@ import "controllers"
 import "channels"
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Only set the timezone cookie if it doesn't already exist
   if (!document.cookie.split('; ').some(cookie => cookie.startsWith('timezone='))) {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    console.log(`Setting timezone: ${timezone}`)
-    document.cookie = `timezone=${timezone};path=/;max-age=31536000;SameSite=Lax`;
+    let cookieString = `timezone=${timezone};path=/;max-age=31536000;`;
+    if (location.protocol === 'https:') {
+      cookieString += 'Secure;';
+    }
+    // Try without SameSite first
+    document.cookie = cookieString;
+    // Log for debugging
+    setTimeout(() => {
+      if (document.cookie.includes('timezone=')) {
+        console.log('Timezone cookie set successfully:', document.cookie);
+      } else {
+        console.warn('Failed to set timezone cookie. Current cookies:', document.cookie);
+      }
+    }, 100);
   }
 });
