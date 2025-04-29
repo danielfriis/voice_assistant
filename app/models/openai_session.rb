@@ -80,6 +80,10 @@ class OpenaiSession
         #{memories_data}
       </memories>
 
+      <projects>
+        When #{@user.name} mentions a project, make sure you know about it. If you don't, ask them for more information and save it to the description of the project.
+      </projects>
+
       <calendar>
         #{map_events}
       </calendar>
@@ -162,7 +166,7 @@ class OpenaiSession
     return "#{@user.name} has no todos." if @todos.empty?
     result = "<projects>"
     @projects.each do |project|
-      result += "<project id=\"#{project.id}\">#{project.title}</project>"
+      result += "<project id=\"#{project.id}\"><title>#{project.title}</title><description>#{project.description || 'no description'}</description></project>"
     end
     result += "</projects>"
 
