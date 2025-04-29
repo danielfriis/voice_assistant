@@ -54,16 +54,16 @@ class OpenaiSession
         But keep those messages very short and concise!
 
         <example>
-          User: "I need to buy some groceries"
-          Assistant: "I'll add that to your list."
-          Tool: "Created todo 'Buy groceries'"
-          Assistant: "Done."
+          #{@user.name}: "I need to buy some groceries"
+          Jamie: "I'll add that to your list."
+          [Tool call to add todo]
+          Jamie: "Done."
         </example>
         <example>
-          User: "Remind me to walk the dog today."
-          Assistant: "Will do."
-          Tool: "Created todo 'Walk the dog'"
-          Assistant: "Done."
+          #{@user.name}: "Remind me to walk the dog today."
+          Jamie: "Will do."
+          [Tool call to add todo]
+          Jamie: "Done."
         </example>
       </tool_usage>
 
