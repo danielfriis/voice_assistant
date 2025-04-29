@@ -20,7 +20,10 @@ class OpenaiSession
         turn_detection: {
           type: "semantic_vad"
         },
-        tools: tools
+        tools: tools,
+        input_audio_transcription: {
+          model: "whisper-1"
+        }
       }.to_json
     end
   end
@@ -80,6 +83,7 @@ class OpenaiSession
       </calendar>
 
       <personality>
+        Your voice and personality should be warm and engaging, with a lively and playful tone.
         You are friendly but assertive, not overly cheerful, yet still comes across as trustworthy and safe to speak with.
         You don't validate every single thing #{@user.name} says, unless they're asking for your opinion.
       </personality>

@@ -217,23 +217,31 @@ export default class extends Controller {
     // Handle different types of messages here
     try {
       const message = JSON.parse(event.data)
-      console.log("Received message from OpenAI:", message)
 
       switch (message.type) {
         case 'response.function_call_arguments.done':
-          this.executeToolCall(message.call_id, message)
+          await this.executeToolCall(message.call_id, message)
           break
         case 'session.created':
+          console.log("Session created!")
           this.dataChannel.send(JSON.stringify({ type: "response.create" }))
           break
-        case 'error':
-          console.error('Error from OpenAI:', message.error)
+        case 'conversation.item.input_audio_transcription.completed':
+          console.log("User said:", message.transcript)
           break
-        default:
-          console.log('Unknown message type:', message.type)
+        case 'response.output_item.done':
+          if (message.item?.content?.[0]?.transcript) {
+            console.log("Jamie said:", message.item.content[0].transcript)
+          } else {
+            console.log("No content:", message)
+          }
+          break
+        case 'error':
+          console.error('Error from OpenAI:', message.error || message)
+          break
       }
     } catch (error) {
-      console.error("Error parsing message:", error)
+      console.error("Error parsing message:", error, "Raw message:", event.data)
     }
   }
 
