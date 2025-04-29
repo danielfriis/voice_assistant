@@ -18,7 +18,8 @@ class OpenaiSession
         voice: "shimmer",
         instructions: instructions,
         turn_detection: {
-          type: "semantic_vad"
+          type: "semantic_vad",
+          eagerness: "low"
         },
         tools: tools,
         input_audio_transcription: {
