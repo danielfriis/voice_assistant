@@ -219,9 +219,9 @@ class OpenaiSession
         result += "<calendar id=\"#{event.calendar.id}\">#{event.calendar.title}</calendar>"
         result += "<description>#{event.description}</description>"
         result += "<start_date>#{event.start_date.in_time_zone(@user.time_zone).strftime('%Y-%m-%d')}</start_date>"
-        result += "<start_time>#{event.start_time.in_time_zone(@user.time_zone).strftime('%H:%M')}</start_time>" if event.start_time.present?
+        result += "<start_time>#{event.full_start_time.in_time_zone(@user.time_zone).strftime('%H:%M')}</start_time>" if event.start_time.present?
         result += "<end_date>#{event.end_date.in_time_zone(@user.time_zone).strftime('%Y-%m-%d')}</end_date>"
-        result += "<end_time>#{event.end_time.in_time_zone(@user.time_zone).strftime('%H:%M')}</end_time>" if event.end_time.present?
+        result += "<end_time>#{event.full_end_time.in_time_zone(@user.time_zone).strftime('%H:%M')}</end_time>" if event.end_time.present?
         result += "</event>"
       end
       result += "</day>"
